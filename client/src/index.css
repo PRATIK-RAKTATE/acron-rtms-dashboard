@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Space Grotesk', -apple-system, sans-serif;
+    --font-serif: 'Cinzel', serif;
+    --font-body: 'Outfit', -apple-system, sans-serif;
+  }
+}
+
+/* Custom Glowing Green Pulse Animations */
+@keyframes greenShadowPulse {
+  0% {
+    filter: drop-shadow(0 0 8px #22c55e) drop-shadow(0 0 16px rgba(34, 197, 94, 0.6)) drop-shadow(0 0 25px rgba(34, 197, 94, 0.35));
+  }
+  100% {
+    filter: drop-shadow(0 0 14px #4ade80) drop-shadow(0 0 26px rgba(74, 222, 128, 0.85)) drop-shadow(0 0 38px rgba(74, 222, 128, 0.5));
+  }
+}
+
+.glowing-green-machine image {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px #22c55e) drop-shadow(0 0 20px rgba(34, 197, 94, 0.7)) drop-shadow(0 0 30px rgba(34, 197, 94, 0.4));
+  animation: greenShadowPulse 2.5s infinite alternate ease-in-out;
+}
+
+.glowing-green-machine:hover image,
+.glowing-green-machine.active-machine image {
+  opacity: 1;
+  filter: drop-shadow(0 0 16px #4ade80) drop-shadow(0 0 30px rgba(74, 222, 128, 0.95)) drop-shadow(0 0 45px rgba(74, 222, 128, 0.65)) !important;
+}
+
+@media print {
+  header, aside {
+    display: none !important;
+  }
+  main {
+    padding: 0 !important;
+  }
+  svg {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
+}
