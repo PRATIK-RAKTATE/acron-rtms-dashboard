@@ -22,6 +22,9 @@ export const ZoneInspector: React.FC<ZoneInspectorProps> = ({
   const zoneData = isZone ? (selectedItem.data as ZoneInfo) : null;
 
   const isMilicron = machineData?.name.toLowerCase().includes('milicron');
+  const isVictor = machineData?.name.toLowerCase().includes('victor');
+  const isLt = machineData?.name.toLowerCase().includes('lt') || machineData?.name.toLowerCase().includes('l&t');
+  const isDashboardSupported = isMilicron || isVictor || isLt;
 
   return (
     <aside
@@ -59,7 +62,7 @@ export const ZoneInspector: React.FC<ZoneInspectorProps> = ({
         {/* Live Machine Dashboard Navigation Button */}
         {machineData && (
           <div>
-            {isMilicron ? (
+            {isDashboardSupported ? (
               <button
                 onClick={() => onOpenDashboard && onOpenDashboard(machineData)}
                 className="w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-['Space_Grotesk'] font-bold text-xs shadow-lg shadow-orange-500/20 flex items-center justify-between transition-all duration-200 active:scale-[0.98] cursor-pointer group"

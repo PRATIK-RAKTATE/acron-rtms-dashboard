@@ -4,6 +4,8 @@ import { TopToolbar } from './components/TopToolbar';
 import { FloorPlanViewport } from './components/FloorPlanViewport';
 import { ZoneInspector } from './components/ZoneInspector';
 import { MilicronDashboardModal } from './components/MilicronDashboardModal';
+import { VictorDashboardModal } from './components/VictorDashboardModal';
+import { LtDashboardModal } from './components/LtDashboardModal';
 
 export const MachineVisualizationPage: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>('olive');
@@ -119,12 +121,24 @@ export const MachineVisualizationPage: React.FC = () => {
         />
       </main>
 
-      {/* Milicron Live 3D Machine Dashboard Simulator Modal */}
+      {/* Live Machine Dashboard Simulator Modal */}
       {dashboardMachine && (
-        <MilicronDashboardModal
-          machine={dashboardMachine}
-          onClose={handleCloseDashboard}
-        />
+        dashboardMachine.name.toLowerCase().includes('victor') ? (
+          <VictorDashboardModal
+            machine={dashboardMachine}
+            onClose={handleCloseDashboard}
+          />
+        ) : dashboardMachine.name.toLowerCase().includes('lt') || dashboardMachine.name.toLowerCase().includes('l&t') ? (
+          <LtDashboardModal
+            machine={dashboardMachine}
+            onClose={handleCloseDashboard}
+          />
+        ) : (
+          <MilicronDashboardModal
+            machine={dashboardMachine}
+            onClose={handleCloseDashboard}
+          />
+        )
       )}
     </div>
   );
