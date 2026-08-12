@@ -24,7 +24,9 @@ export const ZoneInspector: React.FC<ZoneInspectorProps> = ({
   const isMilicron = machineData?.name.toLowerCase().includes('milicron');
   const isVictor = machineData?.name.toLowerCase().includes('victor');
   const isLt = machineData?.name.toLowerCase().includes('lt') || machineData?.name.toLowerCase().includes('l&t');
-  const isDashboardSupported = isMilicron || isVictor || isLt;
+  const isVaibhav = machineData?.name.toLowerCase().includes('vaibhav');
+  const isCmp = machineData?.name.toLowerCase().includes('cmp');
+  const isDashboardSupported = isMilicron || isVictor || isLt || isVaibhav || isCmp;
 
   return (
     <aside

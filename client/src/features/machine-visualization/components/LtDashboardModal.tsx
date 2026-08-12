@@ -193,8 +193,7 @@ export const LtDashboardModal: React.FC<LtDashboardModalProps> = ({
   }, [isPlaying, isEmergencyStopped]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="bg-[#0E1116] border border-[#2A2F3A] w-full max-w-[1550px] h-[92vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden text-zinc-100 font-['Outfit']">
+    <div className="fixed inset-0 z-50 flex flex-col bg-[#0E1116] w-screen h-screen overflow-hidden text-zinc-100 font-['Outfit'] animate-in fade-in duration-200">
         {/* Top Header Bar */}
         <header className="bg-[#14171D] border-b border-[#2A2F3A] px-6 py-4 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-4">
@@ -768,7 +767,6 @@ export const LtDashboardModal: React.FC<LtDashboardModalProps> = ({
             </div>
           </main>
         </div>
-      </div>
     </div>
   );
 };

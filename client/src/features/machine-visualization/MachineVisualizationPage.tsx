@@ -6,6 +6,8 @@ import { ZoneInspector } from './components/ZoneInspector';
 import { MilicronDashboardModal } from './components/MilicronDashboardModal';
 import { VictorDashboardModal } from './components/VictorDashboardModal';
 import { LtDashboardModal } from './components/LtDashboardModal';
+import { VaibhavDashboardModal } from './components/VaibhavDashboardModal';
+import { CmpDashboardModal } from './components/CmpDashboardModal';
 
 export const MachineVisualizationPage: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>('olive');
@@ -125,6 +127,16 @@ export const MachineVisualizationPage: React.FC = () => {
       {dashboardMachine && (
         dashboardMachine.name.toLowerCase().includes('victor') ? (
           <VictorDashboardModal
+            machine={dashboardMachine}
+            onClose={handleCloseDashboard}
+          />
+        ) : dashboardMachine.name.toLowerCase().includes('vaibhav') ? (
+          <VaibhavDashboardModal
+            machine={dashboardMachine}
+            onClose={handleCloseDashboard}
+          />
+        ) : dashboardMachine.name.toLowerCase().includes('cmp') ? (
+          <CmpDashboardModal
             machine={dashboardMachine}
             onClose={handleCloseDashboard}
           />
