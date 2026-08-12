@@ -14,8 +14,10 @@ import {
   Play,
   Pause,
   Activity,
+  Anchor,
 } from 'lucide-react';
 import type { MachineInfo } from '../types/machineVisualization.types';
+import { MouldChangeModal } from './MouldChangeModal';
 
 interface MilicronDashboardModalProps {
   machine: MachineInfo;
@@ -31,6 +33,7 @@ export const MilicronDashboardModal: React.FC<MilicronDashboardModalProps> = ({
   const [isEmergencyStopped, setIsEmergencyStopped] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [activeTimeframe, setActiveTimeframe] = useState<'today' | '7days' | '30days' | 'lifetime' | 'mould'>('today');
+  const [isMouldChangeModalOpen, setIsMouldChangeModalOpen] = useState<boolean>(false);
 
   // SVG Elements Refs
   const screwGroupRef = useRef<SVGGElement>(null);
@@ -353,6 +356,14 @@ export const MilicronDashboardModal: React.FC<MilicronDashboardModalProps> = ({
         </div>
 
         <div className="flex items-center gap-3 font-['IBM_Plex_Mono']">
+          <button
+            onClick={() => setIsMouldChangeModalOpen(true)}
+            className="flex items-center gap-2 bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 border border-amber-500/40 px-3 py-1.5 rounded text-xs font-bold font-['IBM_Plex_Mono'] transition-all active:scale-95 cursor-pointer shadow-[0_0_12px_rgba(245,208,32,0.2)]"
+          >
+            <Anchor className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span>CRANE MOULD CHANGE</span>
+          </button>
+
           <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1 rounded text-xs">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
             <span className="font-bold tracking-wider">LIVE TELEMETRY</span>
@@ -483,6 +494,15 @@ export const MilicronDashboardModal: React.FC<MilicronDashboardModalProps> = ({
                 <div className="text-[10px] text-zinc-400 font-medium border-t border-white/10 pt-1.5 flex items-center justify-between">
                   <span>Current Mould Lifetime</span>
                   <span className="text-emerald-400 font-bold">100% Active</span>
+                </div>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsMouldChangeModalOpen(true);
+                  }}
+                  className="mt-1 w-full py-1.5 px-2 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 rounded text-[10px] font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer font-['IBM_Plex_Mono']"
+                >
+                  <Anchor className="w-3.5 h-3.5" /> CRANE MOULD CHANGE
                 </div>
               </button>
             </div>
@@ -923,6 +943,14 @@ export const MilicronDashboardModal: React.FC<MilicronDashboardModalProps> = ({
           </div>
         </main>
       </div>
+
+      {/* Crane Mould Change Animation Modal */}
+      {isMouldChangeModalOpen && (
+        <MouldChangeModal
+          machine={machine}
+          onClose={() => setIsMouldChangeModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

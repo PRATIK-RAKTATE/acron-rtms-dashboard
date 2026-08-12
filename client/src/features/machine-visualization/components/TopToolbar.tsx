@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ThemeMode } from '../types/machineVisualization.types';
-import { Maximize2, Minimize2, Download, Building2 } from 'lucide-react';
+import { Maximize2, Minimize2, Download, Building2, Anchor } from 'lucide-react';
 
 interface TopToolbarProps {
   theme: ThemeMode;
@@ -8,6 +8,7 @@ interface TopToolbarProps {
   isFullscreen: boolean;
   onToggleFullscreen: () => void;
   onExport: () => void;
+  onOpenMouldChange?: () => void;
 }
 
 export const TopToolbar: React.FC<TopToolbarProps> = ({
@@ -16,6 +17,7 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
   isFullscreen,
   onToggleFullscreen,
   onExport,
+  onOpenMouldChange,
 }) => {
   return (
     <header
@@ -84,6 +86,18 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
             Dark Blueprint
           </button>
         </div>
+
+        {/* Crane Mould Change Button */}
+        {onOpenMouldChange && (
+          <button
+            onClick={onOpenMouldChange}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 text-amber-300 border border-amber-500/40 transition-all cursor-pointer shadow-sm active:scale-95 font-['IBM_Plex_Mono']"
+            title="Overhead 3-Ton Crane Mould Change Animation"
+          >
+            <Anchor className="w-4 h-4 text-amber-400 animate-pulse" />
+            <span className="hidden md:inline">Crane Mould Change</span>
+          </button>
+        )}
 
         {/* Fullscreen Button */}
         <button

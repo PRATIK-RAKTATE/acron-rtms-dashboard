@@ -8,6 +8,7 @@ import { VictorDashboardModal } from './components/VictorDashboardModal';
 import { LtDashboardModal } from './components/LtDashboardModal';
 import { VaibhavDashboardModal } from './components/VaibhavDashboardModal';
 import { CmpDashboardModal } from './components/CmpDashboardModal';
+import { MouldChangeModal } from './components/MouldChangeModal';
 
 export const MachineVisualizationPage: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>('olive');
@@ -15,6 +16,12 @@ export const MachineVisualizationPage: React.FC = () => {
   const [cadGuide, setCadGuide] = useState<CadGuideData | null>(null);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [dashboardMachine, setDashboardMachine] = useState<MachineInfo | null>(null);
+  const [isMouldChangeModalOpen, setIsMouldChangeModalOpen] = useState<boolean>(
+    typeof window !== 'undefined' &&
+      (window.location.pathname.includes('/mould') ||
+        window.location.pathname.includes('mould') ||
+        window.location.hash.includes('mould'))
+  );
 
   // Sync fullscreen change state
   useEffect(() => {
@@ -102,6 +109,7 @@ export const MachineVisualizationPage: React.FC = () => {
         isFullscreen={isFullscreen}
         onToggleFullscreen={handleToggleFullscreen}
         onExport={handleExport}
+        onOpenMouldChange={() => setIsMouldChangeModalOpen(true)}
       />
 
       {/* Main Interactive Floor Area & Inspector Drawer */}
@@ -151,6 +159,13 @@ export const MachineVisualizationPage: React.FC = () => {
             onClose={handleCloseDashboard}
           />
         )
+      )}
+
+      {/* Dedicated Mould Change Crane Animation Modal */}
+      {isMouldChangeModalOpen && (
+        <MouldChangeModal
+          onClose={() => setIsMouldChangeModalOpen(false)}
+        />
       )}
     </div>
   );
