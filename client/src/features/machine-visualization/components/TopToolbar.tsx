@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ThemeMode } from '../types/machineVisualization.types';
-import { Maximize2, Minimize2, Download, Building2, Anchor } from 'lucide-react';
+import { Maximize2, Minimize2, Download, Building2, Anchor, Layers } from 'lucide-react';
 
 interface TopToolbarProps {
   theme: ThemeMode;
@@ -9,6 +9,7 @@ interface TopToolbarProps {
   onToggleFullscreen: () => void;
   onExport: () => void;
   onOpenMouldChange?: () => void;
+  onOpenMouldDashboard?: () => void;
 }
 
 export const TopToolbar: React.FC<TopToolbarProps> = ({
@@ -18,6 +19,7 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
   onToggleFullscreen,
   onExport,
   onOpenMouldChange,
+  onOpenMouldDashboard,
 }) => {
   return (
     <header
@@ -86,6 +88,18 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
             Dark Blueprint
           </button>
         </div>
+
+        {/* Mould Tracking Dashboard Button */}
+        {onOpenMouldDashboard && (
+          <button
+            onClick={onOpenMouldDashboard}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-sky-500/20 to-cyan-500/20 hover:from-sky-500/30 hover:to-cyan-500/30 text-sky-300 border border-sky-500/40 transition-all cursor-pointer shadow-sm active:scale-95 font-['IBM_Plex_Mono']"
+            title="RTMS Mould Tracking Dashboard"
+          >
+            <Layers className="w-4 h-4 text-sky-400" />
+            <span className="hidden md:inline">Mould Dashboard</span>
+          </button>
+        )}
 
         {/* Crane Mould Change Button */}
         {onOpenMouldChange && (

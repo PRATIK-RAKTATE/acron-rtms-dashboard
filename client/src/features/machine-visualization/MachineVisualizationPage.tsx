@@ -9,6 +9,7 @@ import { LtDashboardModal } from './components/LtDashboardModal';
 import { VaibhavDashboardModal } from './components/VaibhavDashboardModal';
 import { CmpDashboardModal } from './components/CmpDashboardModal';
 import { MouldChangeModal } from './components/MouldChangeModal';
+import { MouldDashboard } from './components/MouldDashboard';
 
 export const MachineVisualizationPage: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>('olive');
@@ -18,9 +19,12 @@ export const MachineVisualizationPage: React.FC = () => {
   const [dashboardMachine, setDashboardMachine] = useState<MachineInfo | null>(null);
   const [isMouldChangeModalOpen, setIsMouldChangeModalOpen] = useState<boolean>(
     typeof window !== 'undefined' &&
-      (window.location.pathname.includes('/mould') ||
-        window.location.pathname.includes('mould') ||
-        window.location.hash.includes('mould'))
+      (window.location.pathname.includes('/mould-change') ||
+        window.location.pathname.includes('mould-change') ||
+        window.location.hash.includes('mould-change'))
+  );
+  const [isMouldDashboardOpen, setIsMouldDashboardOpen] = useState<boolean>(
+    typeof window !== 'undefined' && window.location.pathname.includes('/mould-dashboard')
   );
 
   // Sync fullscreen change state
@@ -110,6 +114,7 @@ export const MachineVisualizationPage: React.FC = () => {
         onToggleFullscreen={handleToggleFullscreen}
         onExport={handleExport}
         onOpenMouldChange={() => setIsMouldChangeModalOpen(true)}
+        onOpenMouldDashboard={() => setIsMouldDashboardOpen(true)}
       />
 
       {/* Main Interactive Floor Area & Inspector Drawer */}
@@ -165,6 +170,13 @@ export const MachineVisualizationPage: React.FC = () => {
       {isMouldChangeModalOpen && (
         <MouldChangeModal
           onClose={() => setIsMouldChangeModalOpen(false)}
+        />
+      )}
+
+      {/* Mould Tracking Dashboard */}
+      {isMouldDashboardOpen && (
+        <MouldDashboard
+          onClose={() => setIsMouldDashboardOpen(false)}
         />
       )}
     </div>

@@ -7,9 +7,10 @@ import {
   CheckCircle2,
   Sliders,
   Sparkles,
-  Zap,
   Anchor,
-  Cpu
+  Cpu,
+  Radio,
+  ArrowRightLeft
 } from 'lucide-react';
 import type { MachineInfo } from '../types/machineVisualization.types';
 
@@ -43,6 +44,7 @@ export const MouldChangeModal: React.FC<MouldChangeModalProps> = ({
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [speedMultiplier, setSpeedMultiplier] = useState<number>(1);
   const [isEmergencyStopped, setIsEmergencyStopped] = useState<boolean>(false);
+  const [showDetectionModal, setShowDetectionModal] = useState<boolean>(false);
 
   // SVG Refs for dynamic frame updates
   const craneTrolleyRef = useRef<SVGGElement>(null);
@@ -116,9 +118,17 @@ export const MouldChangeModal: React.FC<MouldChangeModalProps> = ({
       if (isPlaying && !isEmergencyStopped) {
         elapsedInStage += dt;
         if (elapsedInStage >= STAGES[stageIdx].duration) {
-          elapsedInStage = 0;
-          stageIdx = (stageIdx + 1) % STAGES.length;
-          setCurrentStage(stageIdx);
+          if (stageIdx === STAGES.length - 1) {
+            // Completed final mould placement & clamping stage
+            setIsPlaying(false);
+            setShowDetectionModal(true);
+            setStageProgress(1);
+            return;
+          } else {
+            elapsedInStage = 0;
+            stageIdx = stageIdx + 1;
+            setCurrentStage(stageIdx);
+          }
         }
       }
 
@@ -218,11 +228,14 @@ export const MouldChangeModal: React.FC<MouldChangeModalProps> = ({
   const handleJumpToStage = (idx: number) => {
     setCurrentStage(idx);
     setStageProgress(0);
+    setShowDetectionModal(false);
   };
 
-  const handleScrub = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setStageProgress(val);
+  const handleCloseDetectionAndRestart = () => {
+    setShowDetectionModal(false);
+    setCurrentStage(0);
+    setStageProgress(0);
+    setIsPlaying(true);
   };
 
   return (
@@ -261,6 +274,15 @@ export const MouldChangeModal: React.FC<MouldChangeModalProps> = ({
         </div>
 
         <div className="flex items-center gap-3 font-['IBM_Plex_Mono']">
+          <button
+            onClick={() => setShowDetectionModal(true)}
+            className="flex items-center gap-1.5 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-500/40 px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer shadow-[0_0_12px_rgba(0,200,83,0.2)] active:scale-95"
+            title="Preview Mould Auto-Detected RTMS Popup"
+          >
+            <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+            <span>RTMS DETECT POPUP</span>
+          </button>
+
           <div className="flex items-center gap-2 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-3 py-1 rounded-md text-xs font-bold">
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             <span>CRANE AUTOMATION ACTIVE</span>
@@ -696,46 +718,122 @@ export const MouldChangeModal: React.FC<MouldChangeModalProps> = ({
                 </p>
               </div>
             </div>
-
-            {/* Interactive Scrubber & Timeline Bar */}
-            <div className="mt-3 bg-[#1B1E28] border border-[#262B36] rounded-xl p-3 flex flex-col gap-2 shrink-0">
-              <div className="flex items-center justify-between text-xs font-['IBM_Plex_Mono'] font-bold">
-                <span className="text-amber-400 flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-amber-400" /> TIMELINE SCRUBBER
-                </span>
-                <span className="text-zinc-400 font-mono">STAGE PROGRESS: {(stageProgress * 100).toFixed(0)}%</span>
-              </div>
-
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.01"
-                value={stageProgress}
-                onChange={handleScrub}
-                className="w-full accent-[#3DD6E8] cursor-pointer h-2 bg-zinc-800 rounded-lg"
-              />
-
-              {/* Step Navigation Buttons */}
-              <div className="grid grid-cols-5 gap-2 mt-1">
-                {STAGES.map((st, idx) => (
-                  <button
-                    key={st.id}
-                    onClick={() => handleJumpToStage(idx)}
-                    className={`py-1.5 px-1 text-[10px] font-bold rounded border transition-all cursor-pointer truncate font-['Space_Grotesk'] ${
-                      currentStage === idx
-                        ? 'bg-[#3DD6E8]/20 border-[#3DD6E8] text-[#3DD6E8]'
-                        : 'bg-[#12151C] border-[#262B36] text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    STEP 0{idx + 1}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </main>
       </div>
+
+      {/* AUTOMATIC MOULD & CAVITY DETECTED RTMS POPUP */}
+      {showDetectionModal && (
+        <div className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-lg flex items-center justify-center p-4 md:p-6 animate-fade-in font-['Space_Grotesk']">
+          <div className="bg-[#10141D] border-2 border-emerald-500/60 rounded-3xl w-full max-w-4xl p-6 md:p-8 shadow-[0_0_80px_rgba(0,200,83,0.35)] flex flex-col gap-8 relative overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,200,83,0.12),transparent_70%)] pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-emerald-500 via-teal-300 to-emerald-500 animate-pulse" />
+
+            {/* Header Title */}
+            <div className="text-center flex flex-col items-center justify-center gap-2 relative z-10">
+              <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-mono font-bold tracking-widest uppercase shadow-[0_0_15px_rgba(0,200,83,0.3)]">
+                <Radio className="w-4 h-4 animate-pulse text-emerald-400" />
+                <span>RFID AUTO DETECTION</span>
+              </div>
+              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
+                MOULD DETECTED AUTOMATICALLY TO RTMS SYSTEM
+              </h2>
+            </div>
+
+            {/* Main Visual Diagram */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center relative z-10 bg-[#0A0D14] border border-[#202738] rounded-2xl p-6 md:p-8 shadow-inner">
+              {/* 1. Mould with RFID */}
+              <div className="flex flex-col items-center justify-center gap-4 text-center">
+                <div className="w-36 h-36 md:w-44 md:h-44 rounded-2xl bg-[#141A26] border-2 border-amber-500/50 flex items-center justify-center p-3 relative shadow-[0_0_30px_rgba(245,208,32,0.15)] group hover:scale-105 transition-transform">
+                  {/* Mould SVG with RFID Tag */}
+                  <svg viewBox="0 0 120 120" className="w-full h-full">
+                    {/* Mould Base A & B Plates */}
+                    <rect x="15" y="20" width="40" height="80" rx="4" fill="#5B6575" stroke="#F2B705" strokeWidth="2.5" />
+                    <rect x="65" y="20" width="40" height="80" rx="4" fill="#5B6575" stroke="#F2B705" strokeWidth="2.5" />
+                    <line x1="60" y1="20" x2="60" y2="100" stroke="#0E121B" strokeWidth="3" />
+                    {/* Cooling ports */}
+                    <circle cx="30" cy="32" r="5" fill="#3DD6E8" />
+                    <circle cx="30" cy="88" r="5" fill="#E61C24" />
+                    <circle cx="90" cy="32" r="5" fill="#3DD6E8" />
+                    <circle cx="90" cy="88" r="5" fill="#E61C24" />
+                    
+                    {/* RFID Tag Badge mounted on Mould */}
+                    <rect x="25" y="48" width="70" height="24" rx="4" fill="#0E121B" stroke="#00C853" strokeWidth="2" />
+                    <text x="32" y="64" fontSize="11" fontWeight="bold" fill="#00C853" fontFamily="monospace">RFID TAG</text>
+                    <circle cx="85" cy="60" r="3" fill="#00C853" className="animate-ping" />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-amber-300">
+                    MOULD #{machine.mouldNumber ?? '310-NEW'}
+                  </h4>
+                  <p className="text-sm font-mono text-zinc-300 font-semibold">
+                    {machine.cavity ?? 16} CAVITIES
+                  </p>
+                </div>
+              </div>
+
+              {/* 2. Center 2 Arrows Animation */}
+              <div className="flex flex-col items-center justify-center gap-3 py-4">
+                <div className="relative flex items-center justify-center">
+                  <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-emerald-500/20 border-2 border-emerald-500/60 flex items-center justify-center shadow-[0_0_40px_rgba(0,200,83,0.4)] animate-pulse">
+                    <ArrowRightLeft className="w-10 h-10 md:w-12 md:h-12 text-emerald-400" />
+                  </div>
+                </div>
+
+                <div className="bg-emerald-500/20 border border-emerald-500/50 rounded-full px-4 py-1.5 text-xs font-mono font-bold text-emerald-300 tracking-wider flex items-center gap-2 shadow-[0_0_15px_rgba(0,200,83,0.2)]">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+                  <span>MOULD DETECTED</span>
+                </div>
+              </div>
+
+              {/* 3. Machine with RFID Scanner */}
+              <div className="flex flex-col items-center justify-center gap-4 text-center">
+                <div className="w-36 h-36 md:w-44 md:h-44 rounded-2xl bg-[#141A26] border-2 border-emerald-500/50 flex items-center justify-center p-3 relative shadow-[0_0_30px_rgba(0,200,83,0.15)] group hover:scale-105 transition-transform">
+                  {/* Machine with Scanner Graphic */}
+                  <svg viewBox="0 0 120 120" className="w-full h-full">
+                    {/* Machine Base */}
+                    <rect x="15" y="65" width="90" height="40" rx="4" fill="#252C38" stroke="#3DD6E8" strokeWidth="2" />
+                    {/* Clamp Platens */}
+                    <rect x="25" y="30" width="18" height="35" rx="2" fill="#4B5563" />
+                    <rect x="77" y="30" width="18" height="35" rx="2" fill="#4B5563" />
+                    <line x1="25" y1="35" x2="95" y2="35" stroke="#9CA3AF" strokeWidth="2" />
+                    <line x1="25" y1="60" x2="95" y2="60" stroke="#9CA3AF" strokeWidth="2" />
+
+                    {/* RFID Scanner Antenna */}
+                    <rect x="52" y="15" width="16" height="25" rx="3" fill="#0E121B" stroke="#00C853" strokeWidth="2" />
+                    <line x1="60" y1="15" x2="60" y2="5" stroke="#00C853" strokeWidth="2.5" />
+                    <circle cx="60" cy="5" r="3" fill="#00C853" />
+
+                    {/* Scanner Beams */}
+                    <path d="M45,25 L35,50 L85,50 L75,25 Z" fill="rgba(0, 200, 83, 0.2)" stroke="#00C853" strokeWidth="1" strokeDasharray="3 2" />
+                    <text x="36" y="90" fontSize="10" fontWeight="bold" fill="#3DD6E8" fontFamily="monospace">SCANNER</text>
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-emerald-300">
+                    MILACRON ELEKTRON 110
+                  </h4>
+                  <p className="text-sm font-mono text-emerald-400 font-semibold">
+                    RTMS CONNECTED
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* OKAY Button */}
+            <div className="flex justify-center relative z-10 pt-2">
+              <button
+                onClick={handleCloseDetectionAndRestart}
+                className="w-full md:w-auto px-12 py-4 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-400 to-emerald-500 hover:from-emerald-400 hover:to-teal-300 text-black font-extrabold font-['Space_Grotesk'] text-lg transition-all shadow-[0_0_35px_rgba(0,200,83,0.5)] active:scale-95 cursor-pointer flex items-center justify-center gap-3 tracking-wider uppercase"
+              >
+                <span>OKAY</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
