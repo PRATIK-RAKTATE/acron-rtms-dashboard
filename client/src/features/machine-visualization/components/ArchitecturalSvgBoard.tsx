@@ -128,11 +128,10 @@ export const ArchitecturalSvgBoard: React.FC<ArchitecturalSvgBoardProps> = ({
         {/* Zone 1: Raw Material IM */}
         <rect
           id="bay-rm-im"
-          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${
-            selectedItem?.type === 'zone' && selectedItem.id === 'bay-rm-im'
+          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${selectedItem?.type === 'zone' && selectedItem.id === 'bay-rm-im'
               ? 'stroke-white stroke-[3px]'
               : ''
-          }`}
+            }`}
           x="32"
           y="110"
           width="135"
@@ -146,11 +145,10 @@ export const ArchitecturalSvgBoard: React.FC<ArchitecturalSvgBoardProps> = ({
         {/* Zone 2: IM1 */}
         <rect
           id="bay-im1"
-          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${
-            selectedItem?.type === 'zone' && selectedItem.id === 'bay-im1'
+          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${selectedItem?.type === 'zone' && selectedItem.id === 'bay-im1'
               ? 'stroke-white stroke-[3px]'
               : ''
-          }`}
+            }`}
           x="178"
           y="110"
           width="200"
@@ -164,11 +162,10 @@ export const ArchitecturalSvgBoard: React.FC<ArchitecturalSvgBoardProps> = ({
         {/* Zone 3: IM2 */}
         <rect
           id="bay-im2"
-          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${
-            selectedItem?.type === 'zone' && selectedItem.id === 'bay-im2'
+          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${selectedItem?.type === 'zone' && selectedItem.id === 'bay-im2'
               ? 'stroke-white stroke-[3px]'
               : ''
-          }`}
+            }`}
           x="390"
           y="110"
           width="200"
@@ -182,11 +179,10 @@ export const ArchitecturalSvgBoard: React.FC<ArchitecturalSvgBoardProps> = ({
         {/* Zone 4: WIP Goods Area */}
         <rect
           id="bay-wip"
-          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${
-            selectedItem?.type === 'zone' && selectedItem.id === 'bay-wip'
+          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${selectedItem?.type === 'zone' && selectedItem.id === 'bay-wip'
               ? 'stroke-white stroke-[3px]'
               : ''
-          }`}
+            }`}
           x="602"
           y="110"
           width="135"
@@ -202,11 +198,10 @@ export const ArchitecturalSvgBoard: React.FC<ArchitecturalSvgBoardProps> = ({
         {/* Zone 5: Blow Moulding 2 */}
         <rect
           id="bay-bm2"
-          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${
-            selectedItem?.type === 'zone' && selectedItem.id === 'bay-bm2'
+          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${selectedItem?.type === 'zone' && selectedItem.id === 'bay-bm2'
               ? 'stroke-white stroke-[3px]'
               : ''
-          }`}
+            }`}
           x="749"
           y="110"
           width="175"
@@ -220,11 +215,10 @@ export const ArchitecturalSvgBoard: React.FC<ArchitecturalSvgBoardProps> = ({
         {/* Zone 6: Blow Moulding 1 */}
         <rect
           id="bay-bm1"
-          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${
-            selectedItem?.type === 'zone' && selectedItem.id === 'bay-bm1'
+          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${selectedItem?.type === 'zone' && selectedItem.id === 'bay-bm1'
               ? 'stroke-white stroke-[3px]'
               : ''
-          }`}
+            }`}
           x="936"
           y="110"
           width="175"
@@ -238,11 +232,10 @@ export const ArchitecturalSvgBoard: React.FC<ArchitecturalSvgBoardProps> = ({
         {/* Zone 7: Raw Material Area */}
         <rect
           id="bay-rm-area"
-          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${
-            selectedItem?.type === 'zone' && selectedItem.id === 'bay-rm-area'
+          className={`zone-bay cursor-pointer transition-all duration-250 hover:opacity-90 hover:stroke-[#cad4b8] hover:stroke-2 ${selectedItem?.type === 'zone' && selectedItem.id === 'bay-rm-area'
               ? 'stroke-white stroke-[3px]'
               : ''
-          }`}
+            }`}
           x="1123"
           y="110"
           width="125"

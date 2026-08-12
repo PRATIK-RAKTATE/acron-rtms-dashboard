@@ -33,9 +33,8 @@ export const MachineUnit: React.FC<MachineUnitProps> = ({
 
   return (
     <g
-      className={`machine-unit group cursor-pointer transition-all duration-200 ${
-        isGlowingGreen ? 'glowing-green-machine' : ''
-      } ${isActive ? 'active-machine' : ''}`}
+      className={`machine-unit group cursor-pointer transition-all duration-200 ${isGlowingGreen ? 'glowing-green-machine' : ''
+        } ${isActive ? 'active-machine' : ''}`}
       onClick={(e) => onClick(machine, e)}
       onMouseEnter={() => onMouseEnter(machine)}
       onMouseLeave={onMouseLeave}
@@ -83,11 +82,10 @@ export const MachineUnit: React.FC<MachineUnitProps> = ({
           preserveAspectRatio="xMidYMid meet"
           opacity={0.95}
           transform={imageProps.transform}
-          className={`transition-all duration-300 ${
-            isGlowingGreen
+          className={`transition-all duration-300 ${isGlowingGreen
               ? 'animate-pulse'
               : 'group-hover:opacity-100 group-hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]'
-          } ${isActive ? 'opacity-100 drop-shadow-[0_0_14px_rgba(255,255,255,1)]' : ''}`}
+            } ${isActive ? 'opacity-100 drop-shadow-[0_0_14px_rgba(255,255,255,1)]' : ''}`}
         />
       )}
     </g>

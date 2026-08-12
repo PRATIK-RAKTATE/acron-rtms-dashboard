@@ -34,6 +34,9 @@ export interface MachineInfo {
   labelY2: number;
   labelX: number;
   subTitle: string;
+  mouldNumber?: string;
+  cavity?: number;
+  mode?: 'Production' | 'Trial';
 }
 
 export interface SelectedItem {

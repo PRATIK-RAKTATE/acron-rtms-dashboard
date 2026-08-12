@@ -3,12 +3,14 @@ import type { CadGuideData, MachineInfo, SelectedItem, ThemeMode, ZoneInfo } fro
 import { TopToolbar } from './components/TopToolbar';
 import { FloorPlanViewport } from './components/FloorPlanViewport';
 import { ZoneInspector } from './components/ZoneInspector';
+import { MilicronDashboardModal } from './components/MilicronDashboardModal';
 
 export const MachineVisualizationPage: React.FC = () => {
   const [theme, setTheme] = useState<ThemeMode>('olive');
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
   const [cadGuide, setCadGuide] = useState<CadGuideData | null>(null);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
+  const [dashboardMachine, setDashboardMachine] = useState<MachineInfo | null>(null);
 
   // Sync fullscreen change state
   useEffect(() => {
@@ -66,6 +68,14 @@ export const MachineVisualizationPage: React.FC = () => {
     setSelectedItem(null);
   };
 
+  const handleOpenDashboard = (machine: MachineInfo) => {
+    setDashboardMachine(machine);
+  };
+
+  const handleCloseDashboard = () => {
+    setDashboardMachine(null);
+  };
+
   return (
     <div
       className={`min-h-screen w-screen flex flex-col transition-colors duration-400 font-['Outfit'] ${
@@ -105,8 +115,17 @@ export const MachineVisualizationPage: React.FC = () => {
           theme={theme}
           selectedItem={selectedItem}
           onClose={handleCloseInspector}
+          onOpenDashboard={handleOpenDashboard}
         />
       </main>
+
+      {/* Milicron Live 3D Machine Dashboard Simulator Modal */}
+      {dashboardMachine && (
+        <MilicronDashboardModal
+          machine={dashboardMachine}
+          onClose={handleCloseDashboard}
+        />
+      )}
     </div>
   );
 };

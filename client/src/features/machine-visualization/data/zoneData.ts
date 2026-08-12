@@ -97,6 +97,9 @@ export const MACHINE_LIST: MachineInfo[] = [
     labelY1: 116,
     labelY2: 126,
     subTitle: 'N Series [LEFT]',
+    mouldNumber: '235',
+    cavity: 8,
+    mode: 'Production',
     imageProps: { x: 159, y: 157, width: 140, height: 86, transform: 'rotate(90 229 200)' }
   },
   {
