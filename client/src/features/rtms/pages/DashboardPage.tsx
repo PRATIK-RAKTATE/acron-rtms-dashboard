@@ -28,7 +28,7 @@ import { CmpDashboardModal } from '../../machine-visualization/components/CmpDas
 import type { CadGuideData, MachineInfo, SelectedItem, ZoneInfo } from '../../machine-visualization/types/machineVisualization.types';
 
 export function DashboardPage() {
-  const { snapshot, kpiIndex, now, go } = useRtmsContext();
+  const { snapshot, kpiIndex, now } = useRtmsContext();
   const machines = snapshot.machines;
 
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
@@ -117,7 +117,7 @@ export function DashboardPage() {
       {/* Machine Area / Floor Plan Viewport */}
       <div className="mt-5 flex flex-col lg:flex-row gap-3 overflow-hidden">
         <FloorPlanViewport
-          theme="dark"
+          theme="blueprint"
           selectedItem={selectedItem}
           onSelectZone={handleSelectZone}
           onSelectMachine={handleSelectMachine}
