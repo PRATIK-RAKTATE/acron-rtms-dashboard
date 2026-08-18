@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import type { CadGuideData, MachineInfo, SelectedItem, ThemeMode, ZoneInfo } from './types/machineVisualization.types';
 import { TopToolbar } from './components/TopToolbar';
 import { FloorPlanViewport } from './components/FloorPlanViewport';
-import { ZoneInspector } from './components/ZoneInspector';
 import { MilicronDashboardModal } from './components/MilicronDashboardModal';
 import { VictorDashboardModal } from './components/VictorDashboardModal';
 import { LtDashboardModal } from './components/LtDashboardModal';
@@ -11,7 +10,9 @@ import { CmpDashboardModal } from './components/CmpDashboardModal';
 import { MouldChangeModal } from './components/MouldChangeModal';
 import { MouldDashboard } from './components/MouldDashboard';
 
-export const MachineVisualizationPage: React.FC = () => {
+export const MachineVisualizationPage: React.FC<{ onOpenRtms?: () => void }> = ({
+  onOpenRtms,
+}) => {
   const [theme, setTheme] = useState<ThemeMode>('olive');
   const [selectedItem, setSelectedItem] = useState<SelectedItem | null>(null);
   const [cadGuide, setCadGuide] = useState<CadGuideData | null>(null);
@@ -72,18 +73,6 @@ export const MachineVisualizationPage: React.FC = () => {
 
   const handleSelectMachine = (machine: MachineInfo, e: React.MouseEvent) => {
     e.stopPropagation();
-    setSelectedItem({
-      type: 'machine',
-      id: machine.id,
-      data: machine,
-    });
-  };
-
-  const handleCloseInspector = () => {
-    setSelectedItem(null);
-  };
-
-  const handleOpenDashboard = (machine: MachineInfo) => {
     setDashboardMachine(machine);
   };
 
@@ -115,9 +104,10 @@ export const MachineVisualizationPage: React.FC = () => {
         onExport={handleExport}
         onOpenMouldChange={() => setIsMouldChangeModalOpen(true)}
         onOpenMouldDashboard={() => setIsMouldDashboardOpen(true)}
+        onOpenRtms={onOpenRtms}
       />
 
-      {/* Main Interactive Floor Area & Inspector Drawer */}
+      {/* Main Interactive Floor Area */}
       <main className="flex-1 flex flex-col lg:flex-row p-3 gap-3 overflow-hidden">
         <FloorPlanViewport
           theme={theme}
@@ -126,13 +116,6 @@ export const MachineVisualizationPage: React.FC = () => {
           onSelectMachine={handleSelectMachine}
           cadGuide={cadGuide}
           setCadGuide={setCadGuide}
-        />
-
-        <ZoneInspector
-          theme={theme}
-          selectedItem={selectedItem}
-          onClose={handleCloseInspector}
-          onOpenDashboard={handleOpenDashboard}
         />
       </main>
 

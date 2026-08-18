@@ -1,6 +1,6 @@
 import React from 'react';
 import type { ThemeMode } from '../types/machineVisualization.types';
-import { Maximize2, Minimize2, Download, Building2, Anchor, Layers } from 'lucide-react';
+import { Maximize2, Minimize2, Download, Building2, Anchor, Layers, Gauge, Bell } from 'lucide-react';
 
 interface TopToolbarProps {
   theme: ThemeMode;
@@ -10,6 +10,7 @@ interface TopToolbarProps {
   onExport: () => void;
   onOpenMouldChange?: () => void;
   onOpenMouldDashboard?: () => void;
+  onOpenRtms?: () => void;
 }
 
 export const TopToolbar: React.FC<TopToolbarProps> = ({
@@ -20,6 +21,7 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
   onExport,
   onOpenMouldChange,
   onOpenMouldDashboard,
+  onOpenRtms,
 }) => {
   return (
     <header
@@ -88,6 +90,32 @@ export const TopToolbar: React.FC<TopToolbarProps> = ({
             Dark Blueprint
           </button>
         </div>
+
+        {/* Alert Bell Button */}
+        {onOpenRtms && (
+          <button
+            onClick={onOpenRtms}
+            className="relative inline-flex items-center justify-center p-2 rounded-lg border border-white/15 bg-white/5 hover:bg-white/10 text-amber-400 transition-all cursor-pointer shadow-sm active:scale-95"
+            title="View Active RTMS Alerts"
+          >
+            <Bell className="w-4 h-4" />
+            <span className="absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold font-mono text-white bg-gradient-to-r from-red-600 to-rose-500 rounded-full border border-red-400/50 shadow-md shadow-red-500/50 animate-pulse">
+              5
+            </span>
+          </button>
+        )}
+
+        {/* RTMS Intelligence Platform Button */}
+        {onOpenRtms && (
+          <button
+            onClick={onOpenRtms}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-emerald-500/20 to-teal-500/20 hover:from-emerald-500/30 hover:to-teal-500/30 text-emerald-300 border border-emerald-500/40 transition-all cursor-pointer shadow-sm active:scale-95 font-['IBM_Plex_Mono']"
+            title="Open RTMS Manufacturing Intelligence Platform"
+          >
+            <Gauge className="w-4 h-4 text-emerald-400" />
+            <span className="hidden md:inline">RTMS Dashboard</span>
+          </button>
+        )}
 
         {/* Mould Tracking Dashboard Button */}
         {onOpenMouldDashboard && (
