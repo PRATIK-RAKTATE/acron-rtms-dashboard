@@ -34,6 +34,7 @@ export interface MachineInfo {
   labelY2: number;
   labelX: number;
   subTitle: string;
+  rtmsId?: string;
   mouldNumber?: string;
   cavity?: number;
   mode?: 'Production' | 'Trial';

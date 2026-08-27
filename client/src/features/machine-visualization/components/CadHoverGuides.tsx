@@ -7,7 +7,7 @@ interface CadHoverGuidesProps {
 }
 
 export const CadHoverGuides: React.FC<CadHoverGuidesProps> = ({ cadGuide, theme }) => {
-  if (!cadGuide) return null;
+  if (!cadGuide || !cadGuide.isCursorCrosshair) return null;
 
   const strokeColor = theme === 'blueprint' ? '#38bdf8' : '#e8ecd9';
   const accentBg = theme === 'blueprint' ? '#0284c7' : '#3c4731';
@@ -16,9 +16,9 @@ export const CadHoverGuides: React.FC<CadHoverGuidesProps> = ({ cadGuide, theme 
     return (
       <g className="pointer-events-none transition-opacity duration-150">
         <line
-          x1={20}
+          x1={30}
           y1={cadGuide.y}
-          x2={1260}
+          x2={1890}
           y2={cadGuide.y}
           stroke={theme === 'blueprint' ? 'rgba(56, 189, 248, 0.4)' : 'rgba(232, 236, 217, 0.4)'}
           strokeWidth={1}
@@ -26,9 +26,9 @@ export const CadHoverGuides: React.FC<CadHoverGuidesProps> = ({ cadGuide, theme 
         />
         <line
           x1={cadGuide.x}
-          y1={90}
+          y1={135}
           x2={cadGuide.x}
-          y2={650}
+          y2={975}
           stroke={theme === 'blueprint' ? 'rgba(56, 189, 248, 0.4)' : 'rgba(232, 236, 217, 0.4)'}
           strokeWidth={1}
           strokeDasharray="3,3"

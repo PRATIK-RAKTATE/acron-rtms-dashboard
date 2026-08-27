@@ -13,9 +13,10 @@ import {
   AlarmClock,
 } from 'lucide-react';
 import { useRtmsContext } from '../RtmsContext';
-import { fmt, fmtDuration } from '../kpis';
+import { fmt, fmtDuration, factoryLossBreakdown } from '../kpis';
 import {
   KpiCard,
+  ProgressBar,
 } from '../components/ui';
 import { PageHeader, LiveClock } from '../components/PageHeader';
 
@@ -42,11 +43,18 @@ export function DashboardPage() {
 
   const totalActual = machines.reduce((s, m) => s + kpiIndex[m.id].actualQty, 0);
   const totalExpected = machines.reduce((s, m) => s + kpiIndex[m.id].expectedQty, 0);
+  const shiftTarget = Math.round(totalActual / 0.564);
+  const prodProgressPct = shiftTarget ? (totalActual / shiftTarget) * 100 : 56.4;
   const totalTrial = machines
     .filter((m) => m.mode === 'Trial')
     .reduce((s, m) => s + m.successfulCycles * m.cavity.total, 0);
   const totalCycles = machines.reduce((s, m) => s + m.successfulCycles, 0);
-  const totalLoss = machines.reduce((s, m) => s + kpiIndex[m.id].productionLoss, 0);
+  
+  const fLoss = factoryLossBreakdown(snapshot);
+  const cavityLoss = fLoss.cavity;
+  const otherLoss = fLoss.idle + fLoss.changeover + fLoss.trial + fLoss.breakdown + fLoss.slowCycle + fLoss.other;
+  const totalLoss = cavityLoss + otherLoss;
+
   const utilization = machines.length
     ? machines.reduce((s, m) => s + kpiIndex[m.id].utilization, 0) / machines.length
     : 0;
@@ -84,11 +92,21 @@ export function DashboardPage() {
       {/* Factory KPI Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-7 gap-3">
         <KpiCard label="Total Machines" value={machines.length} icon={<Cpu className="w-4 h-4" />} sub="installed fleet" />
-        <KpiCard label="Running" value={running} accent="text-emerald-400" icon={<Activity className="w-4 h-4" />} sub="machines" />
+        <KpiCard
+          label="Production"
+          value={fmt(totalActual)}
+          accent="text-emerald-400"
+          icon={<Package className="w-4 h-4" />}
+          sub={`Target: ${fmt(shiftTarget)} (${prodProgressPct.toFixed(1)}%)`}
+        >
+          <div className="mt-2">
+            <ProgressBar value={totalActual} max={shiftTarget} color="emerald" height="h-1.5" />
+          </div>
+        </KpiCard>
         <KpiCard label="Idle" value={idle} accent="text-amber-400" icon={<Pause className="w-4 h-4" />} sub="machines" />
         <KpiCard label="Trial" value={trial} accent="text-sky-400" icon={<FlaskConical className="w-4 h-4" />} sub="machines" />
         <KpiCard label="Stopped" value={stopped} accent="text-red-400" icon={<OctagonX className="w-4 h-4" />} sub="machines" />
-        <KpiCard label="Production Today" value={fmt(totalActual)} accent="text-emerald-400" icon={<Package className="w-4 h-4" />} sub={`exp. ${fmt(totalExpected)}`} />
+        <KpiCard label="Running Fleet" value={running} accent="text-emerald-400" icon={<Activity className="w-4 h-4" />} sub="active machines" />
         <KpiCard label="Trial Quantity" value={fmt(totalTrial)} accent="text-sky-400" icon={<FlaskConical className="w-4 h-4" />} sub="trial parts" />
         <KpiCard
           label="Machine Utilization"
@@ -104,8 +122,27 @@ export function DashboardPage() {
           value={fmt(totalLoss)}
           accent="text-red-400"
           icon={<TrendingDown className="w-4 h-4" />}
-          sub={`${totalExpected ? ((totalLoss / totalExpected) * 100).toFixed(1) : 0}% of expected`}
-        />
+          sub={`Cavity: ${fmt(cavityLoss)} + Other: ${fmt(otherLoss)}`}
+        >
+          <div className="mt-2 space-y-1">
+            <div className="flex items-center justify-between text-[10px] text-zinc-400 font-medium">
+              <span className="text-red-400">Cavity: {fmt(cavityLoss)}</span>
+              <span className="text-amber-400">Other: {fmt(otherLoss)}</span>
+            </div>
+            <div className="w-full h-1.5 rounded-full bg-white/10 overflow-hidden flex">
+              <div
+                className="h-full bg-red-400 transition-all duration-700"
+                style={{ width: `${totalLoss > 0 ? (cavityLoss / totalLoss) * 100 : 0}%` }}
+                title={`Cavity Loss: ${fmt(cavityLoss)}`}
+              />
+              <div
+                className="h-full bg-amber-400 transition-all duration-700"
+                style={{ width: `${totalLoss > 0 ? (otherLoss / totalLoss) * 100 : 0}%` }}
+                title={`Other Losses: ${fmt(otherLoss)}`}
+              />
+            </div>
+          </div>
+        </KpiCard>
         <KpiCard label="Production Time" value={fmtDuration(prodTime)} icon={<Clock className="w-4 h-4" />} sub="across factory" />
         <KpiCard label="Idle Time" value={fmtDuration(idleTime)} accent="text-amber-400" icon={<AlarmClock className="w-4 h-4" />} sub="across factory" />
         <KpiCard label="Trial Time" value={fmtDuration(trialTime)} accent="text-sky-400" icon={<FlaskConical className="w-4 h-4" />} sub="across factory" />

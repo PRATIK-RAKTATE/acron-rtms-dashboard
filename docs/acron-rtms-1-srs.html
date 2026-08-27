@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ACRON RTMS - Software & Hardware Requirements Specification</title>
+  <style>
+    :root {
+      --ink: #182230;
+      --muted: #667085;
+      --line: #d0d5dd;
+      --paper: #ffffff;
+      --soft: #f8fafc;
+      --accent: #c72018;
+      --accent-dark: #8f1712;
+      --dark: #101828;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: #eef2f6;
+      line-height: 1.6;
+    }
+    .page {
+      max-width: 1040px;
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+    }
+    .cover {
+      border-top: 8px solid var(--accent);
+      padding: 36px 44px 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      width: 170px;
+      height: auto;
+      display: block;
+    }
+    .brand-text {
+      margin-left: auto;
+      text-align: right;
+    }
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      font-weight: 700;
+    }
+    h1 {
+      margin: 10px 0 12px;
+      font-size: 34px;
+      line-height: 1.15;
+      color: var(--dark);
+    }
+    .subtitle {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 820px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .meta-card, .card {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      padding: 14px 16px;
+      min-height: 100%;
+    }
+    .meta-label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+    .content { padding: 30px 44px 44px; }
+    .toc {
+      padding: 20px 24px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+    .toc h2, section h2, .signature-title {
+      margin: 0 0 16px;
+      font-size: 24px;
+      color: var(--dark);
+    }
+    .toc ol {
+      margin: 0;
+      padding-left: 20px;
+      columns: 2;
+      gap: 32px;
+    }
+    .toc li { margin-bottom: 8px; }
+    .toc a { color: var(--ink); text-decoration: none; }
+    section { margin-bottom: 32px; scroll-margin-top: 24px; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .section-no {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+    p { margin: 0 0 14px; }
+    ul, ol { margin: 0 0 14px; padding-left: 22px; }
+    li { margin-bottom: 8px; }
+    .highlight {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      background: #fffdfd;
+      padding: 16px 18px;
+      margin: 16px 0;
+    }
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 16px;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 8px;
+      border: 1px solid var(--line);
+    }
+    th, td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th { background: var(--soft); color: var(--dark); }
+    .signature-section {
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      margin-top: 40px;
+    }
+    .signature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 22px;
+    }
+    .signature-box {
+      border: 1px solid var(--line);
+      padding: 24px 20px 18px;
+      background: var(--soft);
+      min-height: 180px;
+    }
+    .sign-line {
+      border-bottom: 2px solid var(--dark);
+      margin: 26px 0 14px;
+      height: 36px;
+    }
+    .signature-box strong, .signature-box span {
+      display: block;
+      margin-bottom: 8px;
+    }
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; box-shadow: none; border: none; }
+    }
+    @media (max-width: 860px) {
+      .meta-grid, .grid-3, .grid-2, .signature-grid { grid-template-columns: 1fr; }
+      .toc ol { columns: 1; }
+      .content, .cover { padding-left: 22px; padding-right: 22px; }
+      .brand-text { text-align: left; margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="cover">
+      <div class="brand-row">
+        <img class="logo" src="arobix-logo.webp" alt="ARobiX AI Pvt. Ltd. logo" />
+        <div class="brand-text">
+          <p class="eyebrow">Software & Hardware Requirements Specification</p>
+          <strong>ARobiX AI Pvt. Ltd.</strong>
+        </div>
+      </div>
+      <h1>ACRON RTMS - Real-Time Machine Monitoring & Mold Tracking System</h1>
+      <p class="subtitle">Client-facing non-technical software and hardware requirements specification for machine-level hardware, high-temperature RFID mold tracking, central & cloud server setup, role-based analytical dashboards, and auto-reporting systems.</p>
+      <div class="meta-grid">
+        <div class="meta-card"><span class="meta-label">Document</span><div>Software & Hardware Specification</div></div>
+        <div class="meta-card"><span class="meta-label">Version</span><div>1.0</div></div>
+        <div class="meta-card"><span class="meta-label">Prepared By</span><div>ARobiX AI Pvt. Ltd.</div></div>
+        <div class="meta-card"><span class="meta-label">Date</span><div>August 20, 2026</div></div>
+      </div>
+    </header>
+
+    <div class="content">
+      <nav class="toc" aria-label="Table of contents">
+        <h2>Table of Contents</h2>
+        <ol>
+          <li><a href="#purpose">Purpose</a></li>
+          <li><a href="#overview">Project Overview</a></li>
+          <li><a href="#objectives">Main Objectives</a></li>
+          <li><a href="#users">Users and Responsibilities</a></li>
+          <li><a href="#hardware">RTMS Machine-Level & RFID Hardware</a></li>
+          <li><a href="#implementation">Machine-Level Implementation & Commissioning</a></li>
+          <li><a href="#central-server">Central Server Setup & Local Processing</a></li>
+          <li><a href="#cloud-server">Cloud Server Setup & Synchronization</a></li>
+          <li><a href="#dashboard">Role-Based Dashboard & Mold Tracking</a></li>
+          <li><a href="#reporting">Auto Reporting & Real-Time Alerting</a></li>
+          <li><a href="#security">Security, Data Integrity & Access Control</a></li>
+          <li><a href="#out-of-scope">Out of Scope</a></li>
+          <li><a href="#limitations">Current Known Limitations</a></li>
+          <li><a href="#acceptance">Acceptance Criteria</a></li>
+          <li><a href="#future">Future Enhancements</a></li>
+          <li><a href="#open-points">Open Points for Client Confirmation</a></li>
+          <li><a href="#signatures">Approval Signatures</a></li>
+        </ol>
+      </nav>
+
+      <section id="purpose">
+        <div class="section-head"><span class="section-no">1</span><h2>Purpose</h2></div>
+        <p>This document defines the business-facing software and hardware requirements for the ACRON Real-Time Machine Monitoring & Mold Tracking System (RTMS). It provides a clear delivery scope, approval-ready expectations, and a practical reference for client sign-off and operational delivery.</p>
+      </section>
+
+      <section id="overview">
+        <div class="section-head"><span class="section-no">2</span><h2>Project Overview</h2></div>
+        <p>ACRON RTMS is a real-time machine monitoring and mold tracking platform designed for plastic injection molding and industrial manufacturing plants. By connecting shop-floor machine controllers, high-temperature RFID mold tags, fixed RFID readers, a local Central Server, and cloud database backup, RTMS gives complete operational visibility into factory production, mold usage, and overall equipment efficiency.</p>
+        <div class="highlight">The system enables clear operational transparency across plant machinery, mold lifecycle history, real-time event alerts, and production accounting from trial runs to full commercial manufacturing.</div>
+      </section>
+
+      <section id="objectives">
+        <div class="section-head"><span class="section-no">3</span><h2>Main Objectives</h2></div>
+        <div class="grid-3">
+          <div class="card"><strong>Real-Time Machine Monitoring</strong><br/>Track live machine status, production cycles, and operational signals across the factory floor.</div>
+          <div class="card"><strong>RFID Mold Identification</strong><br/>Automatically identify molds and track mold usage using fixed RFID readers and heat-resistant tags (up to 200°C).</div>
+          <div class="card"><strong>Central & Cloud Server Setup</strong><br/>Store real-time floor data locally for zero delay and sync securely to the cloud for remote management.</div>
+          <div class="card"><strong>Role-Based Analytical Dashboard</strong><br/>Provide interactive factory floor maps, machine monitoring pages, OEE charts, and downtime cause categorization.</div>
+          <div class="card"><strong>Mold & Cavity Tracking</strong><br/>Log total mold shot history, active versus blocked cavity counts, and separate trial runs from standard production.</div>
+          <div class="card"><strong>Automated Reporting & Alerts</strong><br/>Send scheduled reports from shift-end to lifetime exports via Email and receive instant Telegram alerts for floor events.</div>
+        </div>
+      </section>
+
+      <section id="users">
+        <div class="section-head"><span class="section-no">4</span><h2>Users and Responsibilities</h2></div>
+        <table>
+          <thead><tr><th>User Role</th><th>Primary Responsibilities</th></tr></thead>
+          <tbody>
+            <tr><td>Plant Manager / Executive</td><td>Reviews plant-wide operational performance, OEE summaries, production loss reports, and shift comparison analytics.</td></tr>
+            <tr><td>Floor Supervisor</td><td>Monitors live factory floor machine status, tracks shift production output, and assigns downtime categories during stoppages.</td></tr>
+            <tr><td>Quality & Mold Specialist</td><td>Manages mold catalog records, monitors active and blocked cavity counts, tracks trial runs, and checks mold history.</td></tr>
+            <tr><td>Maintenance Operator</td><td>Receives real-time Telegram alerts for machine delays or issues and oversees physical equipment and hardware maintenance.</td></tr>
+            <tr><td>System Administrator</td><td>Manages role-based user login access, configures central server settings, and oversees machine connection mappings.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="hardware">
+        <div class="section-head"><span class="section-no">5</span><h2>RTMS Machine-Level & RFID Hardware</h2></div>
+        <p>The shop floor hardware setup guarantees reliable machine data collection and durable mold tracking in harsh industrial environments:</p>
+        <div class="grid-2">
+          <div class="card">
+            <strong>RTMS Machine Controller & Modules</strong>
+            <ul>
+              <li>Industrial PLC base controller with integrated 24V DC power regulation.</li>
+              <li>Network communication interface for central server data connection.</li>
+              <li>Digital input channels for counting production pulses and machine cycles.</li>
+              <li>Analog input modules for monitoring machine signals (such as pressure and temperature sensors).</li>
+              <li>DIN-rail power supply, base mounting hardware, and interconnection accessories.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>RFID Reader & Mold Identification Hardware</strong>
+            <ul>
+              <li>Industrial fixed RFID readers with dedicated directional antennas.</li>
+              <li>Heavy-duty mounting brackets and industrial cables.</li>
+              <li>High-temperature metal-mount RFID tags rated up to 200°C attached directly to molds.</li>
+              <li>Durable industrial enclosure protection for factory floor longevity.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="implementation">
+        <div class="section-head"><span class="section-no">6</span><h2>Machine-Level Implementation & Commissioning</h2></div>
+        <p>Machine-level deployment follows a clear 9-stage engineering workflow across all factory floor machinery:</p>
+        <ol>
+          <li><strong>Hardware Identification:</strong> Cataloging all machine units, controllers, sensors, and RFID readers.</li>
+          <li><strong>Physical Connections:</strong> Mounting controller enclosures, power supplies, and signal connection blocks.</li>
+          <li><strong>PLC Code Installation:</strong> Setting up controller logic to record production pulses and machine sensor signals accurately.</li>
+          <li><strong>RFID Hardware Installation:</strong> Positioning RFID readers and antennas near mold mounting positions for reliable detection.</li>
+          <li><strong>Power / Cable Connections:</strong> Routing power cables, signal wiring, and protective conduits across each machine.</li>
+          <li><strong>Machine Data Acquisition:</strong> Testing real-time detection of machine cycles, active states, and operational signals.</li>
+          <li><strong>Server Data Deployment:</strong> Connecting machine controllers to transmit data directly to the Central Server.</li>
+          <li><strong>Testing & Commissioning:</strong> Verifying accurate mold tag reading up to 200°C and machine pulse counts before final handover.</li>
+          <li><strong>Final Sign-Off:</strong> Conducting live testing across working machines for complete plant verification.</li>
+        </ol>
+      </section>
+
+      <section id="central-server">
+        <div class="section-head"><span class="section-no">7</span><h2>Central Server Setup & Local Processing</h2></div>
+        <p>The Central Local Server serves as the primary data hub on the factory floor, ensuring fast data recording and zero lag:</p>
+        <table>
+          <thead><tr><th>Central Server Component</th><th>Requirement Description</th></tr></thead>
+          <tbody>
+            <tr><td>Central Server Configuration</td><td>Dedicated local server hardware and operating system setup on the plant network.</td></tr>
+            <tr><td>Machine-Wise Data Acquisition</td><td>Automatic data collection from all connected machines on the shop floor simultaneously.</td></tr>
+            <tr><td>Server-Side Data Processing</td><td>Transforming machine inputs into real-time production counts, status updates, and operational metrics.</td></tr>
+            <tr><td>Database Setup & Management</td><td>Configuring a secure local database to store machine history, mold logs, and user account records.</td></tr>
+            <tr><td>Real-Time Machine Data Storage</td><td>Keeping machine data stored locally to ensure continuous plant monitoring even during internet outages.</td></tr>
+            <tr><td>Integration of Connected Machines</td><td>Connecting all machines seamlessly to the central server system for unified management.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="cloud-server">
+        <div class="section-head"><span class="section-no">8</span><h2>Cloud Server Setup & Synchronization</h2></div>
+        <p>The Cloud Server setup enables secure remote management, off-site data backup, and multi-plant reporting access:</p>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Cloud Database & Data Push</strong>
+            <ul>
+              <li>Cloud database configuration for secure remote access and long-term history.</li>
+              <li>Automated data push mechanism to upload production summaries and shift records on a regular schedule.</li>
+              <li>Secure storage of production data with encrypted cloud protection.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Server-to-Cloud Sync & Validation</strong>
+            <ul>
+              <li>Server-to-cloud data synchronization engine that holds data locally during internet drops and syncs automatically when reconnected.</li>
+              <li>Cloud connectivity and validation checks to monitor sync health continuously.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="dashboard">
+        <div class="section-head"><span class="section-no">9</span><h2>Role-Based Website, Analytical Dashboard & Mold Tracking Development</h2></div>
+        <p>The web platform provides clear visual dashboards tailored for plant operations and management decision-making:</p>
+        <div class="grid-3">
+          <div class="card"><strong>Role-Based User Access</strong><br/>Secure login screen granting distinct views and permissions tailored for Executives, Supervisors, Engineers, and Administrators.</div>
+          <div class="card"><strong>Real-Time Factory Dashboard</strong><br/>Interactive visual floor map showing live status for every machine (Running, Idle, Down, Mold Change).</div>
+          <div class="card"><strong>Machine-Wise Monitoring</strong><br/>Detailed dashboard for each machine displaying cycle speed, total output count, sensor values, and status timeline.</div>
+          <div class="card"><strong>Production and OEE Dashboard</strong><br/>Comprehensive view of Availability, Performance, Quality, and Overall Equipment Effectiveness metrics.</div>
+          <div class="card"><strong>Mold Tracking and History</strong><br/>Complete tracking of attached molds, lifetime shot history, heat tag linkage, and maintenance background.</div>
+          <div class="card"><strong>Trial / Production Monitoring</strong><br/>Option to flag machine runs as experimental trial runs or standard commercial production.</div>
+          <div class="card"><strong>Cavity Monitoring</strong><br/>Active versus blocked cavity tracking per mold to calculate production loss caused by disabled cavities.</div>
+          <div class="card"><strong>Production Loss Analysis</strong><br/>Downtime categorization charts breaking down reasons for stoppages (mold setup, material delay, machine maintenance).</div>
+          <div class="card"><strong>Historical Data and Reports</strong><br/>Searchable archives for historical production logs, shift comparisons, and exportable analytical summaries.</div>
+          <div class="card"><strong>Alerts and Events</strong><br/>Central overview of real-time floor notifications, equipment status alerts, and operational events.</div>
+          <div class="card"><strong>Management Analytics</strong><br/>High-level plant performance summaries, multi-shift comparisons, and asset utilization trends.</div>
+        </div>
+      </section>
+
+      <section id="reporting">
+        <div class="section-head"><span class="section-no">10</span><h2>Auto Reporting Module</h2></div>
+        <p>Automated reporting and messaging ensure management and supervisors stay updated without manual effort:</p>
+        <table>
+          <thead><tr><th>Reporting Feature</th><th>Frequency / Export Schedule</th><th>Delivery Channel & Details</th></tr></thead>
+          <tbody>
+            <tr><td>Scheduled Auto-Reporting</td><td>Shift-End, Day-End, Week-End, Month-End, Quarter-End, Year-End</td><td>Automated Email & Telegram delivery containing PDF, Excel, and CSV summary reports for production totals, OEE, and mold usage.</td></tr>
+            <tr><td>Lifetime Data Export</td><td>On-Demand / Scheduled</td><td>Complete lifetime production data export for long-term historical records and compliance.</td></tr>
+            <tr><td>Real-Time Telegram Alert</td><td>Instant Event Trigger</td><td>Immediate Telegram message notification sent directly to supervisors when critical machine stoppages or alerts occur.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="security">
+        <div class="section-head"><span class="section-no">11</span><h2>Security, Data Integrity & Access Control</h2></div>
+        <p>The platform protects business data and ensures smooth plant operations through standard security measures:</p>
+        <ul>
+          <li><strong>Role-Based User Permissions:</strong> User accounts are assigned specific permissions (Administrator, Manager, Supervisor, Engineer) so users only see authorized screens.</li>
+          <li><strong>Protected Local Plant Network:</strong> Machine controllers operate on a isolated local factory network for plant safety.</li>
+          <li><strong>Offline Data Safeguard:</strong> Real-time data is saved on the Central Server first, preventing data loss if internet connectivity drops.</li>
+          <li><strong>Secure Remote Management:</strong> Encrypted web connections protect remote dashboard logins and cloud reporting data transfers.</li>
+        </ul>
+      </section>
+
+      <section id="out-of-scope">
+        <div class="section-head"><span class="section-no">12</span><h2>Out of Scope</h2></div>
+        <ul>
+          <li>Robotic automated physical mold changing mechanisms.</li>
+          <li>Direct modification of physical machine safety interlocks or hydraulic hardware.</li>
+          <li>Remote automated control to alter physical machine speed or pressure settings.</li>
+          <li>Custom third-party ERP software modifications beyond standard data exports.</li>
+        </ul>
+      </section>
+
+      <section id="limitations">
+        <div class="section-head"><span class="section-no">13</span><h2>Current Known Limitations</h2></div>
+        <ul>
+          <li>Heavy metal machine structures require physical positioning adjustments for RFID reader antennas during installation.</li>
+          <li>High-temperature RFID tags attached to molds are designed for continuous operating temperatures up to 200°C.</li>
+          <li>Cloud synchronization speed is dependent on the plant's external internet connection speed.</li>
+        </ul>
+      </section>
+
+      <section id="acceptance">
+        <div class="section-head"><span class="section-no">14</span><h2>Acceptance Criteria</h2></div>
+        <ol>
+          <li>The machine controller accurately records production cycles and machine operational signals.</li>
+          <li>Industrial RFID readers automatically detect high-temperature mold tags (up to 200°C) when molds are installed.</li>
+          <li>The Central Server successfully collects and stores real-time data from all connected factory floor machines.</li>
+          <li>The cloud synchronization engine safely buffers data locally during internet downtime and syncs automatically when reconnected.</li>
+          <li>The role-based website displays the live factory floor map, individual machine dashboards, and OEE metrics clearly.</li>
+          <li>The system supports clear separation between Trial Run tracking and standard Production Run accounting.</li>
+          <li>Mold cavity tracking accurately measures active versus blocked cavities per mold.</li>
+          <li>Downtime reasons can be categorized and reviewed using visual production loss charts.</li>
+          <li>Scheduled auto-reports (Shift, Day, Week, Month, Quarter, Year, Lifetime) are automatically delivered via Email and Telegram.</li>
+          <li>Real-time Telegram alerts arrive instantly on mobile devices when major machine events or unexpected stoppages happen.</li>
+        </ol>
+      </section>
+
+      <section id="future">
+        <div class="section-head"><span class="section-no">15</span><h2>Future Enhancements</h2></div>
+        <ul>
+          <li>Predictive machine maintenance recommendations based on long-term performance trends.</li>
+          <li>Mobile phone push notifications for instant plant updates.</li>
+          <li>Automated camera-based defect inspection integration.</li>
+          <li>Direct connectivity options for SAP and ERP software systems.</li>
+        </ul>
+      </section>
+
+      <section id="open-points">
+        <div class="section-head"><span class="section-no">16</span><h2>Open Points for Client Confirmation</h2></div>
+        <ul>
+          <li>Factory network connections and Central Server installation location.</li>
+          <li>Shift schedule start and end times (e.g., Shift A, Shift B, Shift C).</li>
+          <li>Email address distribution list for automated report emails.</li>
+          <li>Telegram user or group setup for receiving instant alert messages.</li>
+        </ul>
+      </section>
+
+      <section class="signature-section" id="signatures">
+        <h2 class="signature-title">Approval Signatures</h2>
+        <div class="signature-grid">
+          <div class="signature-box"><div class="sign-line"></div><strong>ARobiX AI Project Lead</strong><span>Name:</span><span>Date:</span></div>
+          <div class="signature-box"><div class="sign-line"></div><strong>Client Representative / Technical Operator</strong><span>Name:</span><span>Date:</span></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

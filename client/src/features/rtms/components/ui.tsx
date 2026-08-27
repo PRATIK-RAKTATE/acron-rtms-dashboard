@@ -187,6 +187,7 @@ export function KpiCard({
   icon,
   delta,
   deltaLabel = 'vs target',
+  children,
 }: {
   label: string;
   value: ReactNode;
@@ -195,28 +196,32 @@ export function KpiCard({
   icon?: ReactNode;
   delta?: number;
   deltaLabel?: string;
+  children?: ReactNode;
 }) {
   const DeltaIcon = delta === undefined ? null : delta >= 0 ? TrendingUp : TrendingDown;
   return (
-    <Card className="p-4">
-      <div className="flex items-start justify-between">
-        <p className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">{label}</p>
-        {icon && <span className="text-zinc-500">{icon}</span>}
+    <Card className="p-4 flex flex-col justify-between">
+      <div>
+        <div className="flex items-start justify-between">
+          <p className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">{label}</p>
+          {icon && <span className="text-zinc-500">{icon}</span>}
+        </div>
+        <div className={`mt-2 font-['Space_Grotesk'] text-2xl font-bold ${accent}`}>{value}</div>
+        <div className="mt-1 flex items-center gap-2 text-[11px]">
+          {delta !== undefined && DeltaIcon && (
+            <span
+              className={`inline-flex items-center gap-0.5 font-semibold ${
+                delta >= 0 ? 'text-emerald-400' : 'text-red-400'
+              }`}
+            >
+              <DeltaIcon className="w-3.5 h-3.5" />
+              {Math.abs(delta).toFixed(1)}%
+            </span>
+          )}
+          <span className="text-zinc-500">{sub ?? deltaLabel}</span>
+        </div>
       </div>
-      <div className={`mt-2 font-['Space_Grotesk'] text-2xl font-bold ${accent}`}>{value}</div>
-      <div className="mt-1 flex items-center gap-2 text-[11px]">
-        {delta !== undefined && DeltaIcon && (
-          <span
-            className={`inline-flex items-center gap-0.5 font-semibold ${
-              delta >= 0 ? 'text-emerald-400' : 'text-red-400'
-            }`}
-          >
-            <DeltaIcon className="w-3.5 h-3.5" />
-            {Math.abs(delta).toFixed(1)}%
-          </span>
-        )}
-        <span className="text-zinc-500">{sub ?? deltaLabel}</span>
-      </div>
+      {children}
     </Card>
   );
 }

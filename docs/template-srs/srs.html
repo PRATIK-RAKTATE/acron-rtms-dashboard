@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Second Brain - Software Requirements Specification</title>
+  <style>
+    :root {
+      --ink: #182230;
+      --muted: #667085;
+      --line: #d0d5dd;
+      --paper: #ffffff;
+      --soft: #f8fafc;
+      --accent: #c72018;
+      --accent-dark: #8f1712;
+      --dark: #101828;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: #eef2f6;
+      line-height: 1.6;
+    }
+    .page {
+      max-width: 1040px;
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(16, 24, 40, 0.08);
+    }
+    .cover {
+      border-top: 8px solid var(--accent);
+      padding: 36px 44px 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      width: 170px;
+      height: auto;
+      display: block;
+    }
+    .brand-text {
+      margin-left: auto;
+      text-align: right;
+    }
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--accent-dark);
+      font-weight: 700;
+    }
+    h1 {
+      margin: 10px 0 12px;
+      font-size: 34px;
+      line-height: 1.15;
+      color: var(--dark);
+    }
+    .subtitle {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 760px;
+    }
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .meta-card, .card {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent);
+      padding: 14px 16px;
+      min-height: 100%;
+    }
+    .meta-label {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+    .content { padding: 30px 44px 44px; }
+    .toc {
+      padding: 20px 24px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      margin-bottom: 28px;
+    }
+    .toc h2, section h2, .signature-title {
+      margin: 0 0 16px;
+      font-size: 24px;
+      color: var(--dark);
+    }
+    .toc ol {
+      margin: 0;
+      padding-left: 20px;
+      columns: 2;
+      gap: 32px;
+    }
+    .toc li { margin-bottom: 8px; }
+    .toc a { color: var(--ink); text-decoration: none; }
+    section { margin-bottom: 32px; scroll-margin-top: 24px; }
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .section-no {
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      flex: 0 0 auto;
+    }
+    p { margin: 0 0 14px; }
+    ul, ol { margin: 0 0 14px; padding-left: 22px; }
+    li { margin-bottom: 8px; }
+    .highlight {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--accent);
+      background: #fffdfd;
+      padding: 16px 18px;
+      margin: 16px 0;
+    }
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 16px;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 8px;
+      border: 1px solid var(--line);
+    }
+    th, td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th { background: var(--soft); color: var(--dark); }
+    .signature-section {
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+      margin-top: 40px;
+    }
+    .signature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 22px;
+    }
+    .signature-box {
+      border: 1px solid var(--line);
+      padding: 24px 20px 18px;
+      background: var(--soft);
+      min-height: 180px;
+    }
+    .sign-line {
+      border-bottom: 2px solid var(--dark);
+      margin: 26px 0 14px;
+      height: 36px;
+    }
+    .signature-box strong, .signature-box span {
+      display: block;
+      margin-bottom: 8px;
+    }
+    @media print {
+      body { background: #fff; }
+      .page { margin: 0; box-shadow: none; border: none; }
+    }
+    @media (max-width: 860px) {
+      .meta-grid, .grid-3, .grid-2, .signature-grid { grid-template-columns: 1fr; }
+      .toc ol { columns: 1; }
+      .content, .cover { padding-left: 22px; padding-right: 22px; }
+      .brand-text { text-align: left; margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="cover">
+      <div class="brand-row">
+        <img class="logo" src="arobix-logo.webp" alt="ARobiX AI Pvt. Ltd. logo" />
+        <div class="brand-text">
+          <p class="eyebrow">Software Requirements Specification</p>
+          <strong>ARobiX AI Pvt. Ltd.</strong>
+        </div>
+      </div>
+      <h1>AI Second Brain</h1>
+      <p class="subtitle">Client-facing non-technical software requirements for a private personal knowledge, context, and planning platform.</p>
+      <div class="meta-grid">
+        <div class="meta-card"><span class="meta-label">Document</span><div>Software Requirements Specification</div></div>
+        <div class="meta-card"><span class="meta-label">Version</span><div>1.1</div></div>
+        <div class="meta-card"><span class="meta-label">Prepared By</span><div>ARobiX AI Pvt. Ltd.</div></div>
+        <div class="meta-card"><span class="meta-label">Date</span><div>July 12, 2026</div></div>
+      </div>
+    </header>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="content">
+      <nav class="toc" aria-label="Table of contents">
+        <h2>Table of Contents</h2>
+        <ol>
+          <li><a href="#purpose">Purpose</a></li>
+          <li><a href="#overview">Project Overview</a></li>
+          <li><a href="#objectives">Main Objectives</a></li>
+          <li><a href="#users">Users and Responsibilities</a></li>
+          <li><a href="#capture">Information Capture and Collection</a></li>
+          <li><a href="#organization">Knowledge Organization and Relationship Memory</a></li>
+          <li><a href="#search">Search, Recall, and Retrieval Experience</a></li>
+          <li><a href="#contacts">Contact and Relationship Intelligence</a></li>
+          <li><a href="#communication">Communication Memory</a></li>
+          <li><a href="#storage">Media and Document Storage</a></li>
+          <li><a href="#security">Security and Access Control</a></li>
+          <li><a href="#out-of-scope">Out of Scope</a></li>
+          <li><a href="#limitations">Current Known Limitations</a></li>
+          <li><a href="#acceptance">Acceptance Criteria</a></li>
+          <li><a href="#future">Future Enhancements</a></li>
+          <li><a href="#open-points">Open Points for Client Confirmation</a></li>
+          <li><a href="#signatures">Approval Signatures</a></li>
+        </ol>
+      </nav>
+
+      <section id="purpose">
+        <div class="section-head"><span class="section-no">1</span><h2>Purpose</h2></div>
+        <p>This document defines the business-facing software requirements for the AI Second Brain system. It provides a clear delivery scope, approval-ready expectations, and a practical reference for implementation.</p>
+      </section>
+<br>
+<br>
+<br>
+
+      <section id="overview">
+        <div class="section-head"><span class="section-no">2</span><h2>Project Overview</h2></div>
+        <p>AI Second Brain is a private personal knowledge, context, and planning platform for a single primary user. It is designed to collect information from personal and official daily activity, preserve context, build a living knowledge graph, and support decisions and daily planning using the full available memory base.</p>
+        <div class="highlight">The phase-one product is intended to act as a self-updating digital memory and decision-support assistant for the client.</div>
+      </section>
+
+      <section id="objectives">
+        <div class="section-head"><span class="section-no">3</span><h2>Main Objectives</h2></div>
+        <div class="grid-3">
+          <div class="card">Build a personal knowledge graph from real daily context.</div>
+          <div class="card">Combine files, conversations, contacts, meetings, recordings, and schedules into one memory system.</div>
+          <div class="card">Support context-aware decision assistance and daily planning.</div>
+          <div class="card">Reduce manual effort in storing and organizing information.</div>
+          <div class="card">Enable exact search, related search, and timeline recall.</div>
+          <div class="card">Preserve relationship history, priority, and discussion context around important people.</div>
+        </div>
+      </section>
+      <br>
+      <br>
+      <br>
+      <br>
+      
+
+      <section id="users">
+        <div class="section-head"><span class="section-no">4</span><h2>Users and Responsibilities</h2></div>
+        <table>
+          <thead><tr><th>User Type</th><th>Responsibility</th></tr></thead>
+          <tbody>
+            <tr><td>Primary User</td><td>Uses the system to capture, search, review, plan, and recall personal and official information.</td></tr>
+            <tr><td>Administrator / Technical Operator</td><td>Manages deployment, backup, restore, integration setup, and maintenance when required.</td></tr>
+            <tr><td>Support User</td><td>Provides optional troubleshooting and approved operational assistance.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="capture">
+        <div class="section-head"><span class="section-no">5</span><h2>Information Capture and Collection</h2></div>
+        <p>The system should collect information from approved phase-one sources and bring it into one unified knowledge base.</p>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Approved Phase-One Sources</strong>
+            <ul>
+              <li>Local folders and files</li>
+              <li>PDFs and scanned documents</li>
+              <li>Notes and manual text entries</li>
+              <li>Bookmarks and saved links</li>
+              <li>Images and videos</li>
+              <li>WhatsApp message history, including group chats</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Additional Context Sources</strong>
+            <ul>
+              <li>Voice call recordings</li>
+              <li>Voice notes</li>
+              <li>Meeting recordings</li>
+              <li>Calendar data</li>
+              <li>Contacts and address book data</li>
+              <li>Plaude device recordings and transcripts where available</li>
+            </ul>
+          </div>
+        </div>
+        <p>Phase-one ingestion should support manual upload, folder sync, API integration where approved, export file import, mobile device sync, real-time ingestion where possible, and scheduled ingestion through cron or background jobs.</p>
+        <p>The system should keep original raw files and create searchable extracted content where applicable. Duplicate files should be ignored rather than stored repeatedly.</p>
+      </section>
+
+      <section id="organization">
+        <div class="section-head"><span class="section-no">6</span><h2>Knowledge Organization and Relationship Memory</h2></div>
+        <p>The system should organize information into a master repository and build a personal knowledge graph around the user’s full context.</p>
+        <ul>
+          <li>Identify useful relationships between people, conversations, documents, projects, tasks, plans, ideas, dates, meetings, calls, and recordings.</li>
+          <li>Support a self-updating knowledge graph that helps the user understand prior decisions, related work, and pending actions.</li>
+          <li>Present context-rich recall instead of isolated file retrieval.</li>
+        </ul>
+      </section>
+
+      <section id="search">
+        <div class="section-head"><span class="section-no">7</span><h2>Search, Recall, and Retrieval Experience</h2></div>
+        <p>The user should be able to retrieve information using multiple search modes and advanced filters.</p>
+        <div class="grid-3">
+          <div class="card">AI-assisted search</div>
+          <div class="card">Direct exact search</div>
+          <div class="card">Related-context search</div>
+          <div class="card">Semantic search</div>
+          <div class="card">People, project, date, and source filters</div>
+          <div class="card">Answer, list, and timeline result styles</div>
+        </div>
+        <div class="highlight">Voice search is not required in phase one. The priority is memory, context, planning support, and strong retrieval quality.</div>
+      </section>
+
+      <section id="contacts">
+        <div class="section-head"><span class="section-no">8</span><h2>Contact and Relationship Intelligence</h2></div>
+        <p>The system should maintain one combined person profile across available identity and interaction sources.</p>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Combined Profile Context</strong>
+            <ul>
+              <li>Phone, email, name, and other identifiers where available</li>
+              <li>Chats and discussions</li>
+              <li>Shared files and media</li>
+              <li>Meetings, calls, and notes</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Relationship Handling</strong>
+            <ul>
+              <li>Relationship history and interaction context</li>
+              <li>Priority or importance markers</li>
+              <li>Manual merge or split confirmation when AI matching is uncertain</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="communication">
+        <div class="section-head"><span class="section-no">9</span><h2>Communication Memory</h2></div>
+        <p>The platform should turn approved communication history into usable memory for recall, planning, and relationship context.</p>
+        <table>
+          <thead><tr><th>Communication Source</th><th>Phase-One Expectation</th></tr></thead>
+          <tbody>
+            <tr><td>WhatsApp</td><td>Live sync where feasible and approved, message history support, and group chat inclusion. Deleted messages should be ignored.</td></tr>
+            <tr><td>Calls and voice notes</td><td>Support call records, uploaded or connected recordings, and voice note ingestion.</td></tr>
+            <tr><td>Meetings and Plaude</td><td>Support meeting recordings plus Plaude recordings and transcripts where available.</td></tr>
+          </tbody>
+        </table>
+        <p>Built-in speech-to-text transcription is not a committed requirement for all voice sources in phase one. The system should support ingesting recordings now, while transcript-based processing may depend on imported transcripts or an approved processing flow.</p>
+      </section>
+
+      <section id="storage">
+        <div class="section-head"><span class="section-no">10</span><h2>Media and Document Storage</h2></div>
+        <p>The system should support storage and recall of photos, videos, documents, voice notes, call recordings, meeting recordings, screenshots, research material, and raw imported source files.</p>
+        <ul>
+          <li>Original source files should be retained, including raw backup material stored in object storage such as S3.</li>
+          <li>Items should be retrievable by file name, keyword, person, project, date, source, context, or related discussion.</li>
+        </ul>
+      </section>
+
+      <section id="security">
+        <div class="section-head"><span class="section-no">11</span><h2>Security and Access Control</h2></div>
+        <p>The platform should remain private and controlled with a local-first operating model and active remote backup.</p>
+        <div class="grid-2">
+          <div class="card">
+            <strong>Phase-One Controls</strong>
+            <ul>
+              <li>Secure user authentication</li>
+              <li>Controlled integration setup using approved accounts and APIs</li>
+              <li>Restricted remote access to approved infrastructure</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Backup and Sync Controls</strong>
+            <ul>
+              <li>Secure synchronization to an external private server</li>
+              <li>Active backup, restore, and synchronization support</li>
+              <li>Local encryption at rest planned later, not committed in phase one</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="out-of-scope">
+        <div class="section-head"><span class="section-no">12</span><h2>Out of Scope</h2></div>
+        <ul>
+          <li>Multi-user collaboration workflows</li>
+          <li>Browser extension support</li>
+          <li>Browser history ingestion</li>
+          <li>Claude conversation ingestion</li>
+          <li>ChatGPT conversation ingestion</li>
+          <li>Gmail, Google Drive, OneDrive, Dropbox, Notion, Obsidian, Slack, and Telegram integrations</li>
+          <li>Mobile app delivery as a separate product</li>
+          <li>Guaranteed 100% perfect recall across all data sources</li>
+          <li>Fully autonomous correction of identity matching without user confirmation</li>
+        </ul>
+      </section>
+
+      <section id="limitations">
+        <div class="section-head"><span class="section-no">13</span><h2>Current Known Limitations</h2></div>
+        <ul>
+          <li>The overall product vision is broader than the committed phase-one delivery scope, so several future integrations remain intentionally excluded.</li>
+          <li>Live WhatsApp synchronization and direct communication-source ingestion depend on integration feasibility, platform access, permissions, and legal approval.</li>
+          <li>Built-in speech-to-text is not committed for all recordings in phase one, so some voice data may initially depend on imported transcripts or later processing enhancements.</li>
+          <li>Local encryption at rest is planned later and is not a committed phase-one requirement.</li>
+          <li>Retention behavior for completed project context still needs operational policy definition even though raw backup retention is expected.</li>
+        </ul>
+      </section>
+
+      <section id="acceptance">
+        <div class="section-head"><span class="section-no">14</span><h2>Acceptance Criteria</h2></div>
+        <ol>
+          <li>The system provides a private local-first environment for storing the user’s personal and official knowledge data.</li>
+          <li>The system supports active backup, restore, and synchronization to a private external server.</li>
+          <li>The user can ingest approved phase-one sources including local files, documents, notes, bookmarks, images, videos, WhatsApp history, call recordings, voice notes, meeting recordings, calendar data, contacts, and Plaude data where available.</li>
+          <li>The system retains original raw source files and can create searchable extracted content where applicable.</li>
+          <li>The system can identify and present useful relationships among people, files, conversations, projects, plans, and ideas.</li>
+          <li>The user can retrieve information through AI-assisted search, direct search, related-context search, and advanced filtering.</li>
+          <li>The system supports contextual recall using person, date, topic, project, source, and related metadata.</li>
+          <li>The system maintains a structured and searchable history for important contacts, including combined profile context across approved data sources.</li>
+          <li>The system supports manual confirmation for identity merge or split when AI matching is uncertain.</li>
+          <li>Access is controlled through authentication and secure integration, backup, and remote access controls.</li>
+          <li>Voice search interaction</li>
+        </ol>
+      </section>
+
+      <section id="future">
+        <div class="section-head"><span class="section-no">15</span><h2>Future Enhancements</h2></div>
+        <ul>
+          <li>Local encryption at rest</li>
+          <li>Broader cloud and productivity integrations</li>
+          <li>Richer timeline views</li>
+          <li>Deeper planning assistance and reminder workflows</li>
+          <li>More advanced relationship analytics</li>
+          <li>Wider autonomous semantic clustering and graph refinement</li>
+        </ul>
+      </section>
+
+     
+
+      <section class="signature-section" id="signatures">
+        <h2 class="signature-title">Approval Signatures</h2>
+        <div class="signature-grid">
+          <div class="signature-box"><div class="sign-line"></div><strong>Team Lead</strong><span>Name:</span><span>Date:</span></div>
+          <div class="signature-box"><div class="sign-line"></div><strong>Administrator</strong><span>Name:</span><span>Date:</span></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+</html>
